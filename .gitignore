@@ -1,2 +1,6 @@
 *-temp-*.vimout
 *.swp
+documentation.tex
+documentation.md
+documentation.tuc
+*.log
