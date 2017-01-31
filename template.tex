@@ -1,0 +1,72 @@
+\setupinteraction[state=start, color=middleblue]
+
+\setuppapersize [letter][letter]
+\setuplayout    [width=middle,  backspace=1.5cm, cutspace=1.5cm,
+                 height=middle, topspace=1.5cm, bottomspace=1.5cm]
+
+\setuppagenumbering[location={footer,center}]
+
+\definefontfeature
+  [default]
+  [default]
+  [protrusion=quality,expansion=quality]
+
+\setupalign[hz,hanging]
+\setupbodyfontenvironment[default][em=italic]
+\setupbodyfont[dejavu, 10pt]
+
+
+\setupwhitespace[medium]
+
+\setuphead[section]      [style=\ssbfa]
+\setuphead[subsection]   [style=\ssbf]
+\setuphead[subsubsection][style=\ssbf]
+
+\setuphead[chapter, section, subsection, subsubsection][number=no]
+
+\setupitemize[1][autointro]
+\setupitemize[indenting=no]
+
+\defineframedtext
+    [blockquote]
+    [           
+     rulethickness=2ex,
+        framecolor=darkgreen,
+             width=\textwidth,
+            height=fit,
+        background=,
+        frame=off,
+        leftframe=on,
+        offset=overlay,
+        loffset=3ex,
+    ]
+
+
+\definetextbackground
+    [codeframe]
+    [           
+          location=paragraph,
+     rulethickness=1pt,
+        framecolor=darkred,
+             width=\textwidth,
+            height=fit,
+            before={\testpage[3]\blank[line]},
+             after={\blank},
+    ]
+
+\usemodule[vim]
+
+\definevimtyping[typing]
+                [
+                  syntax=julia,
+                  before=\startcodeframe,
+                  after=\stopcodeframe,
+                  margin=1em,
+                ]
+
+\define\IND{{\mathbb I}}
+
+\starttext
+$body$
+\stoptext
+
