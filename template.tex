@@ -13,7 +13,7 @@
 
 \setupalign[hz,hanging]
 \setupbodyfontenvironment[default][em=italic]
-\setupbodyfont[dejavu, 10pt]
+\setupbodyfont[dejavu, 10pt, ss]
 
 
 \setupwhitespace[medium]
@@ -61,12 +61,24 @@
                   syntax=julia,
                   before=\startcodeframe,
                   after=\stopcodeframe,
-                  margin=1em,
+                  margin=2ex,
                 ]
 
 \define\IND{{\mathbb I}}
 
 \starttext
+
+%TODO: Set title
+
+The code below is a companion to the paper:
+
+\startblockquote
+J. Chakravorty, J. Subramanian, A. Mahajan, \quotation{Stochastic
+approximation based methods for computing the optimal thresholds in
+remote-state estimation with packet drops,} in proceedings of the
+American Control Conference, Seattle, WA, 2017.
+\stopblockquote
+
 $body$
 \stoptext
 

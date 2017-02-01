@@ -1,16 +1,3 @@
-# --- 
-# title: Computing optimal thresholds for remote-state estimation with packet drops
-# authors: Jhelum Chakravorty, Jayakumar Subramanian, Aditya Mahajan
-# date : 2017.01.30
-# ---
-#
-# The code below is a companion to the paper:
-#
-# > J. Chakravorty, J. Subramanian, A. Mahajan, "Stochastic approximation
-# > based methods for computing the optimal thresholds in remote-state
-# > estimation with packet drops," in proceedings of the American Control
-# > Conference, Seattle, WA, 2017.
-#
 # Introduction
 # ============
 #
