@@ -4,3 +4,4 @@ documentation.tex
 documentation.md
 documentation.tuc
 *.log
+vimout/*

@@ -1,4 +1,5 @@
 documentation.pdf: documentation.tex
+	mkdir -p vimout
 	context documentation.tex
 
 documentation.tex: documentation.md template.tex
