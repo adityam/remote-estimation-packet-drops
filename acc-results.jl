@@ -87,6 +87,7 @@ computeTimeSeries(sa_constrained, linspace(0.1,0.8,8), [0.9,1.0], 0.0;
                   iterations=10_000, numRuns=100, savePlot=false)
 
 # Next, we compute the results for packet drop probability $p_d = 0.3$.
+
 computeTimeSeries(sa_costly, linespace(100,500,3), [0.9,1.0], 0.3; 
                   iterations=10_000, numRuns=100, 
                   savePlot=true, labeltext=label_costly, ylim=(0,11))
