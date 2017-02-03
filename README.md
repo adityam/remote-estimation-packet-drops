@@ -57,5 +57,5 @@ Generating the documentation requires:
 
 [Pandoc]: http://pandoc.org
 [sed]: https://www.gnu.org/software/sed/manual/sed.html
-[ConTeXt]: http://contextgarden.net
+[ConTeXt]: http://wiki.contextgarden.net
 [Julia]: http://julialang.org
