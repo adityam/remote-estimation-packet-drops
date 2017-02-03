@@ -1,5 +1,7 @@
 *-temp-*.vimout
 *.swp
+.DS_Store
+output/
 documentation.tex
 documentation.md
 documentation.tuc

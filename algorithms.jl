@@ -1,5 +1,5 @@
 # ---
-# name: packet-drops.jl
+# name: algorihms.jl
 # author: Jhelum Chakravorty, Jayakumar Subramanian, Aditya Mahajan
 # date: 1 Feb, 2017
 # license: BSD 3 clause
