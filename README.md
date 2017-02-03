@@ -17,9 +17,10 @@ The repository contains three main files:
 - [`acc-results.jl`](acc-results.jl): which runs the algorithms for the
   parameters specified in the ACC`17 paper.
 
-The file [documentation.pdf] is a typeset version of the source code.
+The file [documentation.pdf](documentation.pdf) is a typeset version of the
+source code.
 
-The [Makefile] has two main targets: 
+The [Makefile](Makefile) has two main targets: 
 
 - `output`, which runs the code and stores the raw data in the `output`
   directory and plots in the `plots` directory. 
@@ -31,8 +32,8 @@ Thus, the simples way to generate the plots is:
 
 or, if you want to do it manually,
 
-   mkdir -p output plots
-   julia acc-results.jl
+    mkdir -p output plots
+    julia acc-results.jl
 
 ## Dependencies 
 
