@@ -52,14 +52,14 @@ function computeTimeSeries(sa, paramValues, discountValues, dropProbValues;
 
         if savePlot
             plt = plot(xlabel="Iterations", ylabel="Threshold", 
-                       aspect_ratio=1.75, ylim=ylim)
+                       ylim=ylim)
 
             for i in 1:length(paramValues)
                 param = paramValues[i]
                 df = result[i]
                 plot!(plt, df[:upper], linecolor=:lightblue, label="")
                 plot!(plt, df[:lower], linecolor=:lightblue, label="",
-                     fillrange=df[:upper], fillcolor=:gray, fillalpha=0.8)
+                     fillrange=df[:upper], fillcolor=:lightgray, fillalpha=0.8)
                 plot!(plt, df[:mean],  linecolor=:black, linewidth=2, label="")
 
                 x=div(3iterations,4)
@@ -92,5 +92,5 @@ computeTimeSeries(sa_costly, linspace(100,500,3), [0.9,1.0], 0.3;
                   iterations=10_000, numRuns=100, 
                   savePlot=true, labeltext=label_costly, ylim=(0,11))
 computeTimeSeries(sa_constrained, linspace(0.1,0.5,3), [0.9,1.0], 0.0; 
-                  iterations=1000, numRuns=10,
+                  iterations=250, numRuns=10,
                   savePlot=true, labeltext=label_costly, ylim=(0,3.5))
