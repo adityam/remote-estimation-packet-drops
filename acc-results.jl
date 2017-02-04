@@ -31,14 +31,17 @@ label_constrained(param) = labeltext("\\alpha", param)
 
 # The function below computes the results for a particular stochastic
 # approximation algorithm for a range of `paramValues`, `discountValues`,
-# and `packetDropValues` . If the optional argument `savePlot` is `true`, then the
-# results every combination of `discount` and `packetDrop` are saved to a
-# pdf file in the `plots/` directory. The optional values `iterations` and
-# `numRuns` determine the number of iterations and runs. The optional argument
-# `labeltext` formats the label of each plot and `ylim` adjusts the y limits.
+# and `packetDropValues` . If the optional argument `saveRawData` is `true`,
+# the traces of the multiple runs are saved in a `.jld` file; if `savePlot` is
+# `true`, then the results every combination of `discount` and `packetDrop`
+# are saved to a pdf file in the `plots/` directory. The optional values
+# `iterations` and `numRuns` determine the number of iterations and runs. The
+# optional argument `labeltext` formats the label of each plot and `ylim`
+# adjusts the y limits.
 
 function computeTimeSeries(sa, paramValues, discountValues, dropProbValues;
-                           iterations=1000, numRuns=100, savePlot=false,
+                           iterations=1000, numRuns=100, 
+			               saveRawData = false, savePlot=false,
                            labeltext=label_costly, ylim=:auto)
 
     for discount in discountValues, dropProb in dropProbValues
@@ -47,7 +50,7 @@ function computeTimeSeries(sa, paramValues, discountValues, dropProbValues;
         for i in 1:length(paramValues)
             param = paramValues[i]
             result[i] = generateOutput(sa, param, discount, dropProb, iterations; 
-                                       numRuns=numRuns)
+                                       numRuns=numRuns, saveRawData=saveRawData)
         end
 
         if savePlot
@@ -70,7 +73,7 @@ function computeTimeSeries(sa, paramValues, discountValues, dropProbValues;
             end
 
             filename = string("plots/", sa,             "__parameter_", paramValues, 
-                              "__discount_" , discount,  "__dropProb_" , dropProb)
+                              "__discount_", discount,  "__dropProb_" , dropProb)
 
             savefig("$filename.pdf")
         end
@@ -82,15 +85,15 @@ end
 # solving Fredholm integral equations. 
 
 computeTimeSeries(sa_costly, linspace(100,700,7), [0.9,1.0], 0.0; 
-                  iterations=10_000, numRuns=100, savePlot=false)
+                  iterations=10_000, numRuns=100, saveRawData = true, savePlot=false)
 computeTimeSeries(sa_constrained, linspace(0.1,0.8,8), [0.9,1.0], 0.0; 
-                  iterations=10_000, numRuns=100, savePlot=false)
+                  iterations=10_000, numRuns=100, saveRawData = true, savePlot=false)
 
 # Next, we compute the results for packet drop probability $p_d = 0.3$.
 
 computeTimeSeries(sa_costly, linspace(100,500,3), [0.9,1.0], 0.3; 
-                  iterations=10_000, numRuns=100, 
+                  iterations=10_000, numRuns=100, saveRawData = true, 
                   savePlot=true, labeltext=label_costly, ylim=(0,11))
-computeTimeSeries(sa_constrained, linspace(0.1,0.5,3), [0.9,1.0], 0.0; 
-                  iterations=250, numRuns=10,
-                  savePlot=true, labeltext=label_costly, ylim=(0,3.5))
+computeTimeSeries(sa_constrained, linspace(0.1,0.5,3), [0.9,1.0], 0.3; 
+                  iterations=250, numRuns=100, saveRawData = true,
+                  savePlot=true, labeltext=label_constrained, ylim=(0,3.5))
