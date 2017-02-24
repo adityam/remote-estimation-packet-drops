@@ -69,7 +69,7 @@ end
 using JLD, DataFrames
 
 function generateOutput(sa, param, discount, dropProb, iterations;
-    numRuns  = 100, saveRawData = false)
+    numRuns  = 100, saveSummaryData = true, saveRawData = false)
 
     traces = generateTraces(sa, param, discount, dropProb, iterations; numRuns = 100)
     meanValue, std = mean_and_std(traces, 2)
@@ -84,8 +84,9 @@ function generateOutput(sa, param, discount, dropProb, iterations;
     filename = string("output/", sa,             "__parameter_", param, 
                       "__discount_" , discount,  "__dropProb_" , dropProb)
 
-    # Save summary to TSV file
-    writetable("$filename.tsv", stats, separator='\t', header = true)
+    if saveSummaryData
+      writetable("$filename.tsv", stats, separator='\t', header = true)
+    end
 
     if saveRawData
         save("$filename.jld",         "param", param, 

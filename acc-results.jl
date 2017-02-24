@@ -41,7 +41,7 @@ label_constrained(param) = labeltext("\\alpha", param)
 
 function computeTimeSeries(sa, paramValues, discountValues, dropProbValues;
                            iterations=1000, numRuns=100, 
-			               saveRawData = false, savePlot=false,
+			               saveSummaryData=true, saveRawData = false, savePlot=false,
                            labeltext=label_costly, ylim=:auto)
 
     for discount in discountValues, dropProb in dropProbValues
@@ -50,7 +50,8 @@ function computeTimeSeries(sa, paramValues, discountValues, dropProbValues;
         for i in 1:length(paramValues)
             param = paramValues[i]
             result[i] = generateOutput(sa, param, discount, dropProb, iterations; 
-                                       numRuns=numRuns, saveRawData=saveRawData)
+                                       numRuns=numRuns,
+                                       saveSummaryData=saveSummaryData, saveRawData=saveRawData)
         end
 
         if savePlot
