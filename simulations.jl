@@ -57,7 +57,7 @@ end
 # The function `generateOutput` takes the same parameters as `generateTraces`
 # plus an additional optional parameter: `saveRawData`, which defaults to
 # `false`. It returns a data frame with three columns: mean
-# value, mean + standard deviation, mean - standard deviation. These are
+# value, mean + 2(standard deviation), mean - 2(standard deviation). These are
 # shown in the plots included in the paper. This data is saved to a tab
 # separated file (in the `output/` directory). The filename includes the name
 # of stochastic approximation algorithm, and values of parameter, discount,
@@ -79,7 +79,7 @@ function generateOutput(sa, param, discount, dropProb, iterations;
 
     # Generate summary statistics.
     stats = DataFrame(mean=meanValue, 
-                      upper=meanValue + std, lower=meanValue - std)
+                      upper=meanValue + 2std, lower=meanValue - 2std)
 
     filename = string("output/", sa,             "__parameter_", param, 
                       "__discount_" , discount,  "__dropProb_" , dropProb)
