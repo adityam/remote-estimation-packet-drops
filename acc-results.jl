@@ -96,5 +96,5 @@ computeTimeSeries(sa_costly, linspace(100,500,3), [0.9,1.0], 0.3;
                   iterations=10_000, numRuns=100, saveRawData = true, 
                   savePlot=true, labeltext=label_costly, ylim=(0,11))
 computeTimeSeries(sa_constrained, linspace(0.1,0.5,3), [0.9,1.0], 0.3; 
-                  iterations=250, numRuns=100, saveRawData = true,
+                  iterations=10_000, numRuns=100, saveRawData = true,
                   savePlot=true, labeltext=label_constrained, ylim=(0,3.5))
