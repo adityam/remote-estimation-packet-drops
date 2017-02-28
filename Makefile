@@ -14,11 +14,11 @@ documentation.md: algorithms.jl simulations.jl acc-results.jl
 	sed -e 's/^/    /' algorithms.jl \
 	  | sed -E 's/^    #[[:space:]]?//' \
 	  > documentation.md
-	echo "\\page\n" >> documentation.md
+	echo -e "\\page\n" >> documentation.md
 	sed -e 's/^/    /' simulations.jl \
 	  | sed -E 's/^    #[[:space:]]?//' \
 	  >> documentation.md
-	echo "\\page\n" >> documentation.md
+	echo -e "\\page\n" >> documentation.md
 	sed -e 's/^/    /' acc-results.jl \
 	  | sed -E 's/^    #[[:space:]]?//' \
 	  >> documentation.md
