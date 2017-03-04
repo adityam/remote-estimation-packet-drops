@@ -14,20 +14,7 @@
 
 addprocs(Sys.CPU_CORES)
 include("simulations.jl")
-
-# We use Plots package with GR backend to plot the results.
-
-using Plots
-gr()
-
-# A helper function to display labels
-
-function labeltext(s, param)
-    text(string('$', s, "=", param, '$'), 8, :bottom, :right)
-end
-
-label_costly(param)      = labeltext("\\lambda", param)
-label_constrained(param) = labeltext("\\alpha", param)
+include("visualizations.jl")
 
 # The function below computes the results for a particular stochastic
 # approximation algorithm for a range of `paramValues`, `discountValues`,
@@ -55,28 +42,11 @@ function computeTimeSeries(sa, paramValues, discountValues, dropProbValues;
         end
 
         if savePlot
-            plt = plot(xlabel="Iterations", ylabel="Threshold", 
-                       ylim=ylim)
-
-            for i in 1:length(paramValues)
-                param = paramValues[i]
-                df = result[i]
-                plot!(plt, df[:upper], linecolor=:lightblue, label="")
-                plot!(plt, df[:lower], linecolor=:lightblue, label="",
-                     fillrange=df[:upper], fillcolor=:lightgray, fillalpha=0.8)
-                plot!(plt, df[:mean],  linecolor=:black, linewidth=2, label="")
-
-                x=div(3iterations,4)
-                y=df[:upper][x] 
-                label=labeltext(param)
-
-                plot!(plt,annotations=(x,y,label))
-            end
-
             filename = string("plots/", sa,             "__parameter_", paramValues, 
                               "__discount_", discount,  "__dropProb_" , dropProb)
 
-            savefig("$filename.pdf")
+            plotTimeSeries(filename, paramValues, result;
+                           labeltext=labeltext, ylim=ylim)
         end
     end
 end

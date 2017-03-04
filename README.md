@@ -8,12 +8,14 @@ in the paper:
 
 The code is released under BSD 3-clause license. 
 
-The repository contains three main files:
+The repository contains four main files:
 
 - [`algorithms.jl`](algorithms.jl): which implements the stochastic
   approximation algorithms to compute the optimal thresholds.
 - [`simulations.jl`](simulations.jl): which generates traces and summary
   statistics for the stochastic approximation algorithms.
+- [`visualizations.jl`](visualizations.jl): which plots the output of the
+  stochastic approximation algorithms.
 - [`acc-results.jl`](acc-results.jl): which runs the algorithms for the
   parameters specified in the ACC`17 paper.
 

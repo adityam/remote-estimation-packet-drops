@@ -1,4 +1,4 @@
-output: algorithms.jl simulations.jl acc-results.jl
+output: algorithms.jl simulations.jl acc-results.jl visualizations.jl
 	mkdir -p output plots
 	julia acc-results.jl
 
@@ -16,6 +16,10 @@ documentation.md: algorithms.jl simulations.jl acc-results.jl
 	  > documentation.md
 	echo -e "\\page\n" >> documentation.md
 	sed -e 's/^/    /' simulations.jl \
+	  | sed -E 's/^    #[[:space:]]?//' \
+	  >> documentation.md
+	echo -e "\\page\n" >> documentation.md
+	sed -e 's/^/    /' visualizations.jl \
 	  | sed -E 's/^    #[[:space:]]?//' \
 	  >> documentation.md
 	echo -e "\\page\n" >> documentation.md
