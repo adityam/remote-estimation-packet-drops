@@ -20,14 +20,14 @@ end
 # This is implemented in the `generateTraces` function below. The inputs to this
 # function are:
 #
-# * `sa` : the stochastic approximation algorithm to be run. The function
-#   must have the signature:
+# * `alt` : the key corresponding to stochastic approximation algorithm to be
+#   run. The function `saAlt = sa[alt]` must have the signature:
 #   
-#     `sa(param, discount, dropProb; iterations=iterations)`
+#     `saAlt(param, discount, dropProb; iterations=iterations)`
 #
 #     `param` corresponds to `cost` for costly communication
 #     and `rate` for constrained communication.
-# * `param` : A parameter used by the `sa` function, corresponding to
+# * `param` : A parameter used by the `sa[alt]` function, corresponding to
 #   communication cost or rate.
 # * `discount`: The discount factor
 # * `dropProb`: The packet drop probability.
@@ -40,8 +40,9 @@ end
 # The output is a 2D array of size `iterations * numRuns`, where column
 # corresponds to a different traces.
 
-function generateTraces(sa, param, discount, dropProb, iterations; numRuns = 100)
-    tuples = pmap(_ -> sa(param, discount, dropProb; iterations=iterations), 1:numRuns)
+function generateTraces(alt, param, discount, dropProb, iterations; numRuns = 100)
+    saAlt  = sa[alt]
+    tuples = pmap(_ -> saAlt(param, discount, dropProb; iterations=iterations), 1:numRuns)
     traces = zeros(iterations, numRuns)
 
     for run in 1:numRuns
@@ -68,10 +69,10 @@ end
 
 using JLD, DataFrames
 
-function generateOutput(sa, param, discount, dropProb, iterations;
+function generateOutput(alt, param, discount, dropProb, iterations;
     numRuns  = 100, saveSummaryData = true, saveRawData = false)
 
-    traces = generateTraces(sa, param, discount, dropProb, iterations; numRuns = 100)
+    traces = generateTraces(alt, param, discount, dropProb, iterations; numRuns = 100)
     meanValue, std = mean_and_std(traces, 2)
 
     meanValue = vec(meanValue)
@@ -81,7 +82,7 @@ function generateOutput(sa, param, discount, dropProb, iterations;
     stats = DataFrame(mean=meanValue, 
                       upper=meanValue + 2std, lower=meanValue - 2std)
 
-    filename = string("output/", sa,             "__parameter_", param, 
+    filename = string("output/", alt,            "__parameter_", param, 
                       "__discount_" , discount,  "__dropProb_" , dropProb)
 
     if saveSummaryData

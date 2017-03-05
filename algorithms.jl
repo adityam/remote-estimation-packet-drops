@@ -273,3 +273,9 @@ end
 
     return trace
 end
+
+# Create a dictionary of stochastic approximation algorithms. 
+
+sa = Dict{Symbol, Function}()
+sa[:costly] = sa_costly
+sa[:constrained] = sa_constrained
