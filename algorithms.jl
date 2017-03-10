@@ -1,4 +1,5 @@
 # ---
+        channel_on = rand() > dropProb
 # name: algorihms.jl
 # author: Jhelum Chakravorty, Jayakumar Subramanian, Aditya Mahajan
 # date: 1 Feb, 2017
@@ -171,14 +172,19 @@ end
 
     moment1 = 0.0
     moment2 = 0.0
-
+    
+    
     weight1 = decay1
     weight2 = decay2
 
-    @inbounds for k in 1:iterations
-        threshold_plus  = threshold + c
-        threshold_minus = threshold - c
+    counter = 1
 
+    @inbounds for k in 1:iterations
+        β = 0.1
+        η = randn()
+        threshold_plus  = threshold + β*η
+        threshold_minus = threshold - β*η 
+        
         L_plus , M_plus,  K_plus  = sample_average(threshold_plus,  discount, P_channel)
         L_minus, M_minus, K_minus = sample_average(threshold_minus, discount, P_channel)
 
@@ -198,7 +204,10 @@ end
 
         threshold_delta = corrected1 / ( sqrt(corrected2) + epsilon)
 
-        threshold -= alpha * threshold_delta
+        threshold -= alpha * threshold_delta/counter
+        if (k%1000 == 0)
+           counter += 1
+        end	
 
         # The above analysis is valid for positive values of threshold, but
         # the above line can make threshold negative. Ideally, if the
