@@ -40,8 +40,8 @@ end
 # The output is a 2D array of size `iterations * numRuns`, where column
 # corresponds to a different traces.
 
-function generateTraces(sa, param, discount, dropProb, iterations; numRuns = 100)
-    tuples = pmap(_ -> sa(param, discount, dropProb; iterations=iterations), 1:numRuns)
+function generateTraces(sa, param, discount, P_channel, iterations; numRuns = 100)
+    tuples = pmap(_ -> sa(param, discount, P_channel; iterations=iterations), 1:numRuns)
     traces = zeros(iterations, numRuns)
 
     for run in 1:numRuns
@@ -68,10 +68,10 @@ end
 
 using JLD, DataFrames
 
-function generateOutput(sa, param, discount, dropProb, iterations;
+function generateOutput(sa, param, discount, P_channel, iterations;
     numRuns  = 100, saveSummaryData = true, saveRawData = false)
 
-    traces = generateTraces(sa, param, discount, dropProb, iterations; numRuns = 100)
+    traces = generateTraces(sa, param, discount, P_channel, iterations; numRuns = 100)
     meanValue, std = mean_and_std(traces, 2)
 
     meanValue = vec(meanValue)
@@ -82,7 +82,7 @@ function generateOutput(sa, param, discount, dropProb, iterations;
                       upper=meanValue + 2std, lower=meanValue - 2std)
 
     filename = string("output/", sa,             "__parameter_", param, 
-                      "__discount_" , discount,  "__dropProb_" , dropProb)
+                      "__discount_" , discount,  "__P_channel_" , P_channel)
 
     if saveSummaryData
       writetable("$filename.tsv", stats, separator='\t', header = true)
@@ -90,7 +90,7 @@ function generateOutput(sa, param, discount, dropProb, iterations;
 
     if saveRawData
         save("$filename.jld",         "param", param, 
-            "discount", discount,     "dropProb", dropProb,
+            "discount", discount,     "P_channel", P_channel,
             "iterations", iterations, "numRuns",  numRuns, 
             "traces", traces,         "meanValue", meanValue,
             "std", std)

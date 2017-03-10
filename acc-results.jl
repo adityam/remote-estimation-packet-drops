@@ -39,17 +39,17 @@ label_constrained(param) = labeltext("\\alpha", param)
 # optional argument `labeltext` formats the label of each plot and `ylim`
 # adjusts the y limits.
 
-function computeTimeSeries(sa, paramValues, discountValues, dropProbValues;
+function computeTimeSeries(sa, paramValues, discountValues, P_channel_values;
                            iterations=1000, numRuns=100, 
 			               saveSummaryData=true, saveRawData = false, savePlot=false,
                            labeltext=label_costly, ylim=:auto)
 
-    for discount in discountValues, dropProb in dropProbValues
+    for discount in discountValues, P_channel in P_channel_values
         result = Array(DataFrame, length(paramValues))
 
         for i in 1:length(paramValues)
             param = paramValues[i]
-            result[i] = generateOutput(sa, param, discount, dropProb, iterations; 
+            result[i] = generateOutput(sa, param, discount, P_channel, iterations; 
                                        numRuns=numRuns,
                                        saveSummaryData=saveSummaryData, saveRawData=saveRawData)
         end
@@ -74,7 +74,7 @@ function computeTimeSeries(sa, paramValues, discountValues, dropProbValues;
             end
 
             filename = string("plots/", sa,             "__parameter_", paramValues, 
-                              "__discount_", discount,  "__dropProb_" , dropProb)
+                              "__discount_", discount,  "__P_channel_" , P_channel)
 
             savefig("$filename.pdf")
         end
@@ -85,16 +85,13 @@ end
 # separately verify these results from the values obtained from numerically
 # solving Fredholm integral equations. 
 
-computeTimeSeries(sa_costly, linspace(100,700,7), [0.9,1.0], 0.0; 
-                  iterations=10_000, numRuns=100, saveRawData = true, savePlot=false)
-computeTimeSeries(sa_constrained, linspace(0.1,0.8,8), [0.9,1.0], 0.0; 
-                  iterations=10_000, numRuns=100, saveRawData = true, savePlot=false)
+computeTimeSeries(sa_costly, linspace(100,700,7), [0.9,1.0], zip(linspace(0.1, 0.9, 5), linspace(0.1, 0.9, 5)); 
+                  iterations=10_000, numRuns=100, saveRawData = true, savePlot=true)
+computeTimeSeries(sa_constrained, linspace(0.1,0.8,8), [0.9,1.0], zip(linspace(0.1, 0.9, 5), linspace(0.1, 0.9, 5)); 
+                  iterations=10_000, numRuns=100, saveRawData = true, savePlot=true)
 
-# Next, we compute the results for packet drop probability $p_d = 0.3$.
 
-computeTimeSeries(sa_costly, linspace(100,500,3), [0.9,1.0], 0.3; 
-                  iterations=10_000, numRuns=100, saveRawData = true, 
-                  savePlot=true, labeltext=label_costly, ylim=(0,11))
-computeTimeSeries(sa_constrained, linspace(0.1,0.5,3), [0.9,1.0], 0.3; 
-                  iterations=10_000, numRuns=100, saveRawData = true,
-                  savePlot=true, labeltext=label_constrained, ylim=(0,3.5))
+computeTimeSeries(sa_costly, linspace(100,700,7), [0.9,1.0], zip(linspace(0.1, 0.9, 5), 1-linspace(0.1, 0.9, 5)); 
+                  iterations=10_000, numRuns=100, saveRawData = true, savePlot=true)
+computeTimeSeries(sa_constrained, linspace(0.1,0.8,8), [0.9,1.0], zip(linspace(0.1, 0.9, 5), 1-linspace(0.1, 0.9, 5)); 
+                  iterations=10_000, numRuns=100, saveRawData = true, savePlot=true)

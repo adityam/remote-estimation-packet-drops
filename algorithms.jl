@@ -51,17 +51,18 @@ end
 # of `maxIterations` as `10_000`. This number may need to be increased when
 # computing the performance for large `threshold`. 
 
-@inline function sample(threshold, discount, dropProb; maxIterations = 10_000)
+@inline function sample(threshold, discount, P_channel; maxIterations = 10_000)
 
     E, L, M, K = 0.0, 0.0, 0.0, 0.0
 
     count = 0
     scale = 1.0
+    channel_state = 0
 
     while count <= maxIterations
-        channel_on = rand() > dropProb
         transmit   = !(-threshold < E < threshold)
-        success    = transmit && channel_on
+        success    = Bool(transmit && channel_state)
+        channel_state = (rand() > P_channel[channel_state+1])*1 
 
         if !success
           L += scale * distortion(E) 
@@ -90,12 +91,12 @@ end
 # out by averaging over a mini-batch. The default size of the mini-batch is
 # `1000` iterations.
 
-@inline function sample_average(threshold, discount, dropProb; iterations::Int=1000)
+@inline function sample_average(threshold, discount, P_channel; iterations::Int=1000)
 
     ell, emm, kay = 0.0, 0.0, 0.0
 
     for i in 1:iterations
-        L, M, K = sample(threshold, discount, dropProb)
+        L, M, K = sample(threshold, discount, P_channel)
         ell += L
         emm += M
         kay += K
@@ -154,7 +155,7 @@ end
 # The output of the function is a trace of the estimates of the
 # threshold (therefore, it is a 1D array fo size `iterations`).
 
-@fastmath function sa_costly(cost, discount, dropProb ;
+@fastmath function sa_costly(cost, discount, P_channel ;
     iterations :: Int     = 1_000,
        initial :: Float64 = 1.0,
         decay1 :: Float64 = 0.9,
@@ -178,8 +179,8 @@ end
         threshold_plus  = threshold + c
         threshold_minus = threshold - c
 
-        L_plus , M_plus,  K_plus  = sample_average(threshold_plus,  discount, dropProb)
-        L_minus, M_minus, K_minus = sample_average(threshold_minus, discount, dropProb)
+        L_plus , M_plus,  K_plus  = sample_average(threshold_plus,  discount, P_channel)
+        L_minus, M_minus, K_minus = sample_average(threshold_minus, discount, P_channel)
 
         C_plus  = (L_plus  + cost*K_plus )/M_plus
         C_minus = (L_minus + cost*K_minus)/M_minus
@@ -239,7 +240,7 @@ end
 # The output of the function is a trace of the estimates of the
 # threshold (therefore, it is a 1D array fo size `iterations`).
 
-@fastmath function sa_constrained(rate, discount, dropProb ;
+@fastmath function sa_constrained(rate, discount, P_channel ;
     iterations :: Int     = 1_000,
        initial :: Float64 = 1.0,
         alpha  :: Float64 = 1.0,
@@ -250,7 +251,7 @@ end
     trace     = zeros(iterations)
 
     @inbounds for k in 1:iterations
-        _, M, K = sample_average(threshold, discount, dropProb; iterations=1)
+        _, M, K = sample_average(threshold, discount, P_channel; iterations=1)
 
         rl         = alpha/k
         threshold -= rl*(rate * M - K)
