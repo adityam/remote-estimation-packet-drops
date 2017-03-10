@@ -86,15 +86,15 @@ end
 # solving Fredholm integral equations. 
 
 computeTimeSeries(sa_costly, linspace(100,700,7), [0.9,1.0], 0.0; 
-                  iterations=10_000, numRuns=100, saveRawData = true, savePlot=false)
-computeTimeSeries(sa_constrained, linspace(0.1,0.8,8), [0.9,1.0], 0.0; 
-                  iterations=10_000, numRuns=100, saveRawData = true, savePlot=false)
+                  iterations=75_000, numRuns=100, saveRawData = true, savePlot=true)
+#computeTimeSeries(sa_constrained, linspace(0.1,0.8,8), [0.9,1.0], 0.0; 
+#                  iterations=10_000, numRuns=100, saveRawData = true, savePlot=true)
 
 # Next, we compute the results for packet drop probability $p_d = 0.3$.
 
-computeTimeSeries(sa_costly, linspace(100,500,3), [0.9,1.0], 0.3; 
-                  iterations=10_000, numRuns=100, saveRawData = true, 
-                  savePlot=true, labeltext=label_costly, ylim=(0,11))
-computeTimeSeries(sa_constrained, linspace(0.1,0.5,3), [0.9,1.0], 0.3; 
-                  iterations=10_000, numRuns=100, saveRawData = true,
-                  savePlot=true, labeltext=label_constrained, ylim=(0,3.5))
+computeTimeSeries(sa_costly, linspace(100,700,4), [0.9,1.0], 0.3; 
+                  iterations=75_000, numRuns=100, saveRawData = true, 
+                  savePlot=true, labeltext=label_costly, ylim=(0,13))
+#computeTimeSeries(sa_constrained, linspace(0.1,0.5,3), [0.9,1.0], 0.3; 
+#                  iterations=10_000, numRuns=100, saveRawData = true,
+#                  savePlot=true, labeltext=label_constrained, ylim=(0,3.5))

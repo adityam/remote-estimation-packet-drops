@@ -160,7 +160,7 @@ end
         decay1 :: Float64 = 0.9,
 	    decay2 :: Float64 = 0.999,
 	   epsilon :: Float64 = 1e-8,
-        alpha  :: Float64 = 0.01,
+        alpha  :: Float64 = 0.05,
              c :: Float64 = 0.1,
 	     debug :: Bool    = false,
     )
@@ -174,9 +174,14 @@ end
     weight1 = decay1
     weight2 = decay2
 
+    counter = 1
+
     @inbounds for k in 1:iterations
-        threshold_plus  = threshold + c
-        threshold_minus = threshold - c
+	    β = 0.1
+	    η = randn()
+        threshold_plus  = threshold + β*η
+        threshold_minus = threshold - β*η
+
 
         L_plus , M_plus,  K_plus  = sample_average(threshold_plus,  discount, dropProb)
         L_minus, M_minus, K_minus = sample_average(threshold_minus, discount, dropProb)
@@ -184,7 +189,7 @@ end
         C_plus  = (L_plus  + cost*K_plus )/M_plus
         C_minus = (L_minus + cost*K_minus)/M_minus
 
-        gradient = (C_plus - C_minus)/2c
+        gradient = η*(C_plus - C_minus)/2β
 
         moment1 = decay1 * moment1 + (1 - decay1) * gradient
         moment2 = decay2 * moment2 + (1 - decay2) * gradient^2
@@ -197,7 +202,11 @@ end
 
         threshold_delta = corrected1 / ( sqrt(corrected2) + epsilon)
 
-        threshold -= alpha * threshold_delta
+        if (k%1000 == 0)
+            counter += 1
+        end
+        threshold -= alpha * threshold_delta / counter
+        #threshold -= alpha * gradient
 
         # The above analysis is valid for positive values of threshold, but
         # the above line can make threshold negative. Ideally, if the
