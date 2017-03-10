@@ -1,4 +1,5 @@
 # ---
+        channel_on = rand() > dropProb
 # name: algorihms.jl
 # author: Jhelum Chakravorty, Jayakumar Subramanian, Aditya Mahajan
 # date: 1 Feb, 2017
